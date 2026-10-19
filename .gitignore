@@ -1,0 +1,11 @@
+# Resultados de compilacion
+pidufi.exe
+libopenjp2-7.dll
+Pidufi-Setup-*.exe
+Pidufi-Portable-*.zip
+dist/
+*.o
+
+# Archivos personales (no subir)
+mejoras.md
+PDF_TEST.pdf

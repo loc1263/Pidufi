@@ -1,0 +1,26 @@
+#include <windows.h>
+#include "resource.h"
+
+1 ICON "pidufi.ico"
+
+IDD_GOTO DIALOGEX 0, 0, 170, 62
+STYLE DS_MODALFRAME | DS_CENTER | DS_SETFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Ir a la pagina"
+FONT 9, "Segoe UI"
+BEGIN
+    LTEXT       "Pagina:", IDC_LABEL, 10, 8, 150, 8
+    EDITTEXT    IDC_EDIT, 10, 20, 150, 14, ES_AUTOHSCROLL | ES_NUMBER
+    DEFPUSHBUTTON "Aceptar", IDOK, 60, 42, 48, 14
+    PUSHBUTTON  "Cancelar", IDCANCEL, 112, 42, 48, 14
+END
+
+IDD_PASSWORD DIALOGEX 0, 0, 200, 76
+STYLE DS_MODALFRAME | DS_CENTER | DS_SETFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Documento protegido"
+FONT 9, "Segoe UI"
+BEGIN
+    LTEXT       "Este PDF esta protegido. Escribe la contrasena:", IDC_LABEL, 10, 8, 180, 16
+    EDITTEXT    IDC_EDIT, 10, 28, 180, 14, ES_AUTOHSCROLL | ES_PASSWORD
+    DEFPUSHBUTTON "Aceptar", IDOK, 90, 52, 48, 14
+    PUSHBUTTON  "Cancelar", IDCANCEL, 142, 52, 48, 14
+END
