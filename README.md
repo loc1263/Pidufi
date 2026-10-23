@@ -2,6 +2,8 @@
 
 Lector de PDF simple y liviano para Windows, escrito en C++17 con Win32 y [MuPDF](https://mupdf.com/). Sin dependencias en tiempo de ejecucion salvo una DLL.
 
+![Pidufi](docs/pantallazo.png)
+
 ## Caracteristicas
 
 - Abrir PDF desde el boton, con `Ctrl+O`, arrastrando el archivo a la ventana o desde la linea de comandos (`pidufi.exe archivo.pdf`).
@@ -11,6 +13,7 @@ Lector de PDF simple y liviano para Windows, escrito en C++17 con Win32 y [MuPDF
 - Enlaces del PDF: los internos (indice, referencias) saltan a su destino y los de web o correo se abren con el programa predeterminado.
 - PDF protegidos con contrasena: la pide al abrir.
 - Recuerda el tamano y la posicion de la ventana, y la pagina y el zoom de cada PDF (en `%APPDATA%\Pidufi\settings.txt`).
+- Impresion (`Ctrl+P`) con el dialogo estandar de Windows: impresora, rango de paginas y copias.
 - Seleccion de texto con el mouse (tambien entre varias paginas) y copia al portapapeles.
 - Solo se renderiza la zona visible de las paginas visibles, por lo que el consumo de memoria no crece con el zoom ni con el largo del documento (un PDF de 3000 paginas abre en ~0,2 s y usa ~25 MB).
 
@@ -19,6 +22,7 @@ Lector de PDF simple y liviano para Windows, escrito en C++17 con Win32 y [MuPDF
 | Accion | Teclas |
 |---|---|
 | Abrir archivo | `Ctrl+O` |
+| Imprimir | `Ctrl+P` |
 | Acercar / alejar | `+` / `-`, o `Ctrl` + rueda |
 | Zoom 100% | `Ctrl+0` |
 | Ajustar al ancho | `Ctrl+9` |
