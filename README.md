@@ -2,6 +2,8 @@
 
 Lector de PDF simple y liviano para Windows, escrito en C++17 con Win32 y [MuPDF](https://mupdf.com/). Sin dependencias en tiempo de ejecucion salvo una DLL.
 
+Hecho para abrir un PDF y leerlo, sin interrupciones: no muestra publicidad, ventanas emergentes, avisos de registro ni pantallas adicionales.
+
 ![Pidufi](docs/pantallazo.png)
 
 ## Caracteristicas
