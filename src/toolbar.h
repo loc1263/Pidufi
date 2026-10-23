@@ -9,7 +9,7 @@
 class Toolbar {
 public:
     static constexpr int kHeight = 44;
-    static constexpr int kButtonCount = 8;
+    static constexpr int kButtonCount = 9;
 
     Toolbar();
     ~Toolbar();

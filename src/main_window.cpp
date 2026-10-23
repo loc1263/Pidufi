@@ -28,6 +28,7 @@ struct KeyBinding {
 
 const KeyBinding kKeys[] = {
     {'O', 1, Command::Open},
+    {'P', 1, Command::Print},
     {'F', 1, Command::Search},
     {'T', 1, Command::ToggleToc},
     {'G', 1, Command::GoToPage},
@@ -270,6 +271,9 @@ void MainWindow::execute(Command cmd) {
     const bool hasDoc = m_doc.isOpen();
     switch (cmd) {
         case Command::Open: chooseFile(); break;
+        case Command::Print:
+            if (hasDoc) printDocument();
+            break;
         case Command::Copy: copySelection(); break;
         case Command::SelectAll: selectAll(); break;
         case Command::ZoomIn:
@@ -588,6 +592,72 @@ const std::vector<RectF>& MainWindow::selRectsFor(int page) {
         rects = m_doc.selectionRects(page, a, b);
     }
     return m_selCache.emplace(page, std::move(rects)).first->second;
+}
+
+// Imprime con el dialogo estandar de Windows. Cada pagina se renderiza a la resolucion de la
+// impresora (con tope) y se ajusta al area imprimible conservando la proporcion.
+void MainWindow::printDocument() {
+    const int total = m_doc.pageCount();
+    PRINTDLGW pd = {};
+    pd.lStructSize = sizeof(pd);
+    pd.hwndOwner = m_hwnd;
+    pd.Flags = PD_RETURNDC | PD_NOSELECTION | PD_USEDEVMODECOPIESANDCOLLATE | PD_ALLPAGES;
+    pd.nMinPage = 1;
+    pd.nMaxPage = (WORD)std::min(total, 65535);
+    pd.nFromPage = 1;
+    pd.nToPage = pd.nMaxPage;
+    pd.nCopies = 1;
+    if (!PrintDlgW(&pd)) return;
+
+    HDC pdc = pd.hDC;
+    int first = 0, last = total - 1;
+    if (pd.Flags & PD_PAGENUMS) {
+        first = std::max(0, (int)pd.nFromPage - 1);
+        last = std::min(total - 1, (int)pd.nToPage - 1);
+    }
+    // Con "intercalar" activado el controlador ya repite el trabajo; si no, se repite aqui.
+    const int copies = (pd.Flags & PD_USEDEVMODECOPIESANDCOLLATE) ? 1 : std::max<int>(1, pd.nCopies);
+
+    DOCINFOW di = {};
+    di.cbSize = sizeof(di);
+    di.lpszDocName = L"Pidufi";
+    bool ok = StartDocW(pdc, &di) > 0;
+    const int dpiX = GetDeviceCaps(pdc, LOGPIXELSX), dpiY = GetDeviceCaps(pdc, LOGPIXELSY);
+    const int areaW = GetDeviceCaps(pdc, HORZRES), areaH = GetDeviceCaps(pdc, VERTRES);
+    const float renderDpi = (float)std::min(300, std::min(dpiX, dpiY));
+
+    for (int copy = 0; ok && copy < copies; copy++) {
+        for (int i = first; ok && i <= last; i++) {
+            const PageSize sz = m_doc.pageSizes()[i];
+            const float scale = renderDpi / 72.0f;
+            const int pw = std::max(1, (int)(sz.w * scale)), ph = std::max(1, (int)(sz.h * scale));
+            Pixmap pix = m_doc.render(i, scale, {0, 0, pw, ph});
+            ok = StartPage(pdc) > 0;
+            if (ok && pix) {
+                const float fit = std::min((float)areaW / pw, (float)areaH / ph);
+                const int dw = (int)(pw * fit), dh = (int)(ph * fit);
+                BITMAPINFO bi = {};
+                bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+                bi.bmiHeader.biWidth = pix.stride() / 4;
+                bi.bmiHeader.biHeight = -ph;
+                bi.bmiHeader.biPlanes = 1;
+                bi.bmiHeader.biBitCount = 32;
+                bi.bmiHeader.biCompression = BI_RGB;
+                SetStretchBltMode(pdc, HALFTONE);
+                StretchDIBits(pdc, (areaW - dw) / 2, (areaH - dh) / 2, dw, dh, 0, 0, pw, ph,
+                              pix.samples(), &bi, DIB_RGB_COLORS, SRCCOPY);
+            }
+            if (EndPage(pdc) <= 0) ok = false;
+        }
+    }
+    if (ok) EndDoc(pdc);
+    else {
+        AbortDoc(pdc);
+        MessageBoxW(m_hwnd, L"No se pudo imprimir el documento.", L"Pidufi", MB_ICONERROR);
+    }
+    DeleteDC(pdc);
+    if (pd.hDevMode) GlobalFree(pd.hDevMode);
+    if (pd.hDevNames) GlobalFree(pd.hDevNames);
 }
 
 void MainWindow::copySelection() {

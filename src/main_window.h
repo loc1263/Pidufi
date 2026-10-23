@@ -65,6 +65,7 @@ private:
     void saveWindow();
     void chooseFile();
     void copySelection();
+    void printDocument();
     void selectAll();
     void clearSelection();
     void updateSelection(SelPoint b);

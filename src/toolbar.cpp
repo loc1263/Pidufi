@@ -20,6 +20,12 @@ void IconOpen(HDC dc, int cx, int cy) {
     Polygon(dc, pts, 6);
 }
 
+void IconPrint(HDC dc, int cx, int cy) {  // impresora con la hoja saliendo
+    Rectangle(dc, cx - 6, cy - 9, cx + 6, cy - 2);
+    Rectangle(dc, cx - 10, cy - 2, cx + 10, cy + 5);
+    Rectangle(dc, cx - 6, cy + 2, cx + 6, cy + 9);
+}
+
 void IconMagnifier(HDC dc, int cx, int cy, bool plus) {
     Ellipse(dc, cx - 10, cy - 10, cx + 4, cy + 4);
     Line(dc, cx + 4, cy + 4, cx + 10, cy + 10);
@@ -72,6 +78,7 @@ struct Button {
 
 constexpr Button kButtons[Toolbar::kButtonCount] = {
     {Command::Open, IconOpen, 0},
+    {Command::Print, IconPrint, 0},
     {Command::ZoomOut, IconZoomOut, 10},
     {Command::ZoomIn, IconZoomIn, 0},
     {Command::FitWidth, IconFitWidth, 0},

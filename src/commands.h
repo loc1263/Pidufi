@@ -4,6 +4,7 @@
 enum class Command {
     None,
     Open,
+    Print,
     ZoomIn,
     ZoomOut,
     ZoomReset,
