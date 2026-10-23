@@ -2,7 +2,7 @@
 Unicode true
 !define APP "Pidufi"
 !ifndef VERSION
-!define VERSION "1.2.0"  ; normalmente llega desde build_installer.bat (/DVERSION=...)
+!error "Falta la version: compilar con build_installer.bat (/DVERSION=...)"
 !endif
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP}"
 
