@@ -39,6 +39,14 @@ Hecho para abrir un PDF y leerlo, sin interrupciones: no muestra publicidad, ven
 
 La seleccion solo funciona en PDF con texto (no en escaneos sin OCR).
 
+## Aviso de Windows al ejecutar
+
+Al abrir Pidufi por primera vez, Windows SmartScreen puede mostrar una pantalla azul ("Windows protegio su PC"). No es un virus: ocurre porque el programa no esta firmado digitalmente y aun no tiene reputacion entre los usuarios de Windows. El codigo es abierto (licencia MIT) y puedes revisarlo en este repositorio.
+
+Para continuar, pulsa **Mas informacion** y luego **Ejecutar de todas formas**.
+
+En el zip portable puedes evitar el aviso: antes de extraerlo, clic derecho sobre el `.zip` → **Propiedades** → marca **Desbloquear** → **Aceptar**.
+
 ## Compilar
 
 Requisitos:
